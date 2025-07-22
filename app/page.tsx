@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function Home() {
   const [displayText, setDisplayText] = useState('');
+  const [isTyping, setIsTyping] = useState(true);
   const fullText = "Hi, I'm Grace.";
   
   useEffect(() => {
@@ -13,6 +15,7 @@ export default function Home() {
         setDisplayText(fullText.slice(0, index + 1));
         index++;
       } else {
+        setIsTyping(false);
         clearInterval(timer);
       }
     }, 150);
@@ -24,7 +27,16 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
       <h1 className="text-4xl font-bold">
         {displayText}
-        <span className="animate-pulse">|</span>
+        <motion.span
+          animate={isTyping ? {} : { opacity: [1, 0, 1] }}
+          transition={{ 
+            duration: 0.8, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+        >
+          |
+        </motion.span>
       </h1>
     </div>
   );
