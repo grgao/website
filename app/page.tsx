@@ -30,7 +30,7 @@ export default function Home() {
         <motion.span
           animate={isTyping ? {} : { opacity: [1, 0, 1] }}
           transition={{ 
-            duration: 0.8, 
+            duration: 1.2, 
             repeat: Infinity, 
             ease: "easeInOut" 
           }}
