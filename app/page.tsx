@@ -26,8 +26,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-start pt-48 gap-16">
-      <h1 className="text-4xl font-bold">
+    <div className="min-h-screen bg-background text-foreground relative flex items-center justify-center">
+      <h1 className="text-4xl font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-10">
         {displayText}
         <motion.span
           animate={isTyping ? {} : { opacity: [1, 0, 1] }}
@@ -44,24 +44,24 @@ export default function Home() {
       <AnimatePresence>
         {showInputs && (
           <motion.div 
-            className="flex flex-row gap-4 w-full max-w-2xl"
+            className="flex flex-row gap-4 w-full max-w-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-8"
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 8 }}
             transition={{ 
               duration: 3, 
               ease: "easeOut"
             }}
           >
-            <input
-              type="text"
-              placeholder="Nice to meet you, who are you?"
-              className="flex-1 px-4 py-3 bg-card border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-ring text-foreground placeholder:text-muted-foreground text-center"
-            />
-            <input
-              type="text"
-              placeholder="What are you working on?"
-              className="flex-1 px-4 py-3 bg-card border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-ring text-foreground placeholder:text-muted-foreground text-center"
-            />
+            <button
+              className="flex-1 px-4 py-3 bg-card border border-border rounded-2xl hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring text-foreground text-center transition-colors"
+            >
+              Nice to meet you, who are you?
+            </button>
+            <button
+              className="flex-1 px-4 py-3 bg-card border border-border rounded-2xl hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring text-foreground text-center transition-colors"
+            >
+              What are you working on?
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
