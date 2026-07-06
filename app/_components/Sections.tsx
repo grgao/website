@@ -5,7 +5,7 @@ import type { Experience } from "../_data/content";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-end pb-32">
+    <section data-snap className="relative min-h-screen flex items-end pb-32">
       <div className="px-8 md:px-16 max-w-5xl">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-accent text-shadow-cyan">
           <span className="size-1.5 rounded-full bg-accent hud-pulse" />
@@ -64,7 +64,7 @@ function StatBlock({
 
 export function AboutSection() {
   return (
-    <section className="relative min-h-screen flex items-center py-28">
+    <section data-snap className="relative min-h-screen flex items-center py-28">
       <div className="px-8 md:px-16 max-w-5xl">
         <SectionLabel index="01" title="DOSSIER" />
 
@@ -128,7 +128,7 @@ export function ExperienceSection() {
 function ExperiencePanel({ exp, index }: { exp: Experience; index: number }) {
   const isCurrent = exp.status === "ACTIVE";
   return (
-    <div className="min-h-screen flex items-center px-8 md:px-16 py-28">
+    <div data-snap className="min-h-screen flex items-center px-8 md:px-16 py-28">
       <div className="max-w-5xl w-full">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.28em] text-primary">
           <span
@@ -167,7 +167,7 @@ function ExperiencePanel({ exp, index }: { exp: Experience; index: number }) {
 
 export function SkillsSection() {
   return (
-    <section className="relative min-h-screen flex items-center px-8 md:px-16 py-28">
+    <section data-snap className="relative min-h-screen flex items-center px-8 md:px-16 py-28">
       <div className="max-w-6xl w-full">
         <SectionLabel index="03" title="LOADOUT" />
 
@@ -214,7 +214,7 @@ function SkillBlock({
 
 export function ContactSection() {
   return (
-    <section className="relative min-h-screen flex items-center px-8 md:px-16 pb-32">
+    <section data-snap className="relative min-h-screen flex items-center px-8 md:px-16 pb-32">
       <div className="max-w-5xl w-full">
         <SectionLabel index="04" title="OPEN CHANNEL" />
 

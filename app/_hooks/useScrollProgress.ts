@@ -1,6 +1,7 @@
 "use client";
 
 import Lenis from "lenis";
+import Snap from "lenis/snap";
 import { useEffect, useRef } from "react";
 
 export function useScrollProgress() {
@@ -38,8 +39,32 @@ export function useScrollProgress() {
     };
     lenis.on("scroll", onScroll);
 
+    // Proximity snap — settle onto a section when scroll ends near one.
+    const snap = new Snap(lenis, {
+      type: "proximity",
+      velocityThreshold: 1,
+      duration: 0.9,
+      easing: (t: number) => 1 - Math.pow(1 - t, 3),
+    });
+
+    const snapIds: number[] = [];
+    const registerSnaps = () => {
+      snapIds.forEach((id) => snap.remove(id));
+      snapIds.length = 0;
+      document.querySelectorAll<HTMLElement>("[data-snap]").forEach((el) => {
+        const id = snap.add(el.offsetTop);
+        if (typeof id === "number") snapIds.push(id);
+      });
+    };
+    // Wait a tick so layout settles before measuring offsetTop.
+    const raf1 = requestAnimationFrame(registerSnaps);
+    window.addEventListener("resize", registerSnaps);
+
     return () => {
       cancelAnimationFrame(rafId);
+      cancelAnimationFrame(raf1);
+      window.removeEventListener("resize", registerSnaps);
+      snap.destroy();
       lenis.destroy();
       lenisRef.current = null;
     };

@@ -53,11 +53,12 @@ export function CameraRig({ scrollProgressRef, mouseRef }: Props) {
     camCurve.getPointAt(THREE.MathUtils.clamp(smoothed.current, 0, 1), tmpCam);
     lookCurve.getPointAt(THREE.MathUtils.clamp(smoothed.current, 0, 1), tmpLook);
 
-    // Mouse parallax — small additive offset
+    // Mouse parallax — small additive offset. Sign flipped so the camera
+    // rotates *toward* the cursor rather than away.
     const mx = mouseRef.current?.x ?? 0;
     const my = mouseRef.current?.y ?? 0;
-    targetRot.current.x = THREE.MathUtils.lerp(targetRot.current.x, my * 0.08, dt * 4);
-    targetRot.current.y = THREE.MathUtils.lerp(targetRot.current.y, mx * 0.12, dt * 4);
+    targetRot.current.x = THREE.MathUtils.lerp(targetRot.current.x, -my * 0.08, dt * 4);
+    targetRot.current.y = THREE.MathUtils.lerp(targetRot.current.y, -mx * 0.12, dt * 4);
 
     camera.position.copy(tmpCam);
     camera.lookAt(tmpLook);

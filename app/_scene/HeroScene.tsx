@@ -42,22 +42,22 @@ export function HeroScene({ scrollProgressRef, scrollVelocityRef }: Props) {
       gl={{ antialias: true, powerPreference: "high-performance" }}
       camera={{ fov: 55, near: 0.1, far: 400 }}
       onCreated={({ scene }) => {
-        scene.fog = new THREE.FogExp2(0x0a0f1a, 0.012);
-        scene.background = new THREE.Color(0x070b14);
+        scene.fog = new THREE.FogExp2(0x120818, 0.012);
+        scene.background = new THREE.Color(0x0e0716);
       }}
     >
-      <ambientLight intensity={0.6} color="#7d88aa" />
+      <ambientLight intensity={0.55} color="#c088c0" />
       <directionalLight
         position={[5, 18, 10]}
-        intensity={1.3}
-        color="#ffb775"
+        intensity={1.35}
+        color="#ff9dc9"
       />
       <directionalLight
         position={[-12, 8, -20]}
-        intensity={0.9}
-        color="#6fc4ff"
+        intensity={0.95}
+        color="#a980ff"
       />
-      <hemisphereLight args={["#a9c0ff", "#0a0f1c", 0.4]} />
+      <hemisphereLight args={["#ffb3d9", "#120620", 0.45]} />
 
       <City />
       <CityWindows />

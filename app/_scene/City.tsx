@@ -83,14 +83,14 @@ export function City() {
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4, -30]} receiveShadow>
         <planeGeometry args={[400, 400, 1, 1]} />
         <meshStandardMaterial
-          color="#06080d"
+          color="#0d060f"
           roughness={1}
           metalness={0}
         />
       </mesh>
 
       <gridHelper
-        args={[400, 80, "#1a2840", "#101826"]}
+        args={[400, 80, "#3a1f4a", "#1e0e26"]}
         position={[0, -3.99, -30]}
       />
 
@@ -107,7 +107,7 @@ export function City() {
             position={[b.position[0], b.position[1] + b.size[1] / 2 + 2, b.position[2]]}
           >
             <coneGeometry args={[0.25, 4, 4]} />
-            <meshStandardMaterial color="#1a2030" />
+            <meshStandardMaterial color="#2a1830" />
           </mesh>
         ))}
     </group>
@@ -118,11 +118,11 @@ function BuildingInstances({ buildings }: { buildings: Building[] }) {
   const meshRef = useMemo(() => {
     const geom = new THREE.BoxGeometry(1, 1, 1);
     const mat = new THREE.MeshStandardMaterial({
-      color: "#162033",
-      roughness: 0.75,
-      metalness: 0.15,
-      emissive: "#3a4e7a",
-      emissiveIntensity: 0.35,
+      color: "#241830",
+      roughness: 0.72,
+      metalness: 0.18,
+      emissive: "#5a2e5e",
+      emissiveIntensity: 0.4,
     });
     const inst = new THREE.InstancedMesh(geom, mat, buildings.length);
     const m = new THREE.Matrix4();
@@ -131,7 +131,8 @@ function BuildingInstances({ buildings }: { buildings: Building[] }) {
       m.makeScale(b.size[0], b.size[1], b.size[2]);
       m.setPosition(b.position[0], b.position[1], b.position[2]);
       inst.setMatrixAt(i, m);
-      color.setHSL(b.hue, 0.1, 0.05 + b.lit * 0.04);
+      // Warm plum → cool violet tint variation
+      color.setHSL(0.83 + (b.hue - 0.55) * 0.4, 0.35, 0.06 + b.lit * 0.05);
       inst.setColorAt(i, color);
     });
     inst.instanceMatrix.needsUpdate = true;
@@ -169,9 +170,10 @@ export function CityWindows({ count = 1400, seed = 4242 }: { count?: number; see
       mesh.setMatrixAt(i, m);
 
       const choice = rand();
-      if (choice < 0.7) color.setHex(0xffd089);
-      else if (choice < 0.9) color.setHex(0x7ad7ff);
-      else color.setHex(0xff6b6b);
+      if (choice < 0.5) color.setHex(0xff90c8); // hot pink
+      else if (choice < 0.75) color.setHex(0xc98cff); // lavender
+      else if (choice < 0.9) color.setHex(0x8be9ff); // cyan pop
+      else color.setHex(0xffe4a0); // rare warm highlight
       mesh.setColorAt(i, color);
     }
     mesh.instanceMatrix.needsUpdate = true;
