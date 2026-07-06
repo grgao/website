@@ -2,8 +2,39 @@
 
 import { useEffect, useState } from "react";
 
-export function HudHeader() {
+/** Pull a readable GPU model out of the WebGL renderer string.
+ *  Raw values look like "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)". */
+function detectGpu(): string | undefined {
+  try {
+    const canvas = document.createElement("canvas");
+    const gl =
+      canvas.getContext("webgl2") ?? canvas.getContext("webgl");
+    if (!gl) return undefined;
+    const ext = gl.getExtension("WEBGL_debug_renderer_info");
+    const raw: string = ext
+      ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
+      : gl.getParameter(gl.RENDERER);
+    if (!raw) return undefined;
+
+    let name = raw;
+    const angle = raw.match(/^ANGLE \((.*)\)$/);
+    if (angle) {
+      const parts = angle[1].split(",").map((p) => p.trim());
+      name = parts[1] ?? parts[0];
+    }
+    name = name.replace(/^ANGLE Metal Renderer:\s*/i, "").replace(/\s*\/.*$/, "");
+    return name.slice(0, 28);
+  } catch {
+    return undefined;
+  }
+}
+
+function useHudTelemetry() {
   const [time, setTime] = useState("--:--:--");
+  const [fps, setFps] = useState<number>();
+  const [gpu, setGpu] = useState<string>();
+  const [tz, setTz] = useState<string>();
+  const [online, setOnline] = useState(true);
 
   useEffect(() => {
     const update = () => {
@@ -15,6 +46,44 @@ export function HudHeader() {
     const id = setInterval(update, 1000);
     return () => clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    setGpu(detectGpu());
+    setTz(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+    setOnline(navigator.onLine);
+    const up = () => setOnline(true);
+    const down = () => setOnline(false);
+    window.addEventListener("online", up);
+    window.addEventListener("offline", down);
+
+    // Real frame rate of the page (same thread as the WebGL scene).
+    let raf = 0;
+    let frames = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      frames++;
+      if (now - last >= 1000) {
+        setFps(Math.round((frames * 1000) / (now - last)));
+        frames = 0;
+        last = now;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("online", up);
+      window.removeEventListener("offline", down);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return { time, fps, gpu, tz, online };
+}
+
+export function HudHeader() {
+  const { time, fps, gpu, tz, online } = useHudTelemetry();
 
   return (
     <header
@@ -40,16 +109,32 @@ export function HudHeader() {
           </div>
         </div>
 
-        {/* Middle: status */}
+        {/* Middle: live telemetry */}
         <div className="hidden md:flex items-center gap-2 text-[10px] text-foreground/70">
           <span className="inline-flex items-center gap-1.5">
-            <span className="size-1.5 rounded-full bg-success hud-pulse" />
-            LINK · NOMINAL
+            <span
+              className={`size-1.5 rounded-full hud-pulse ${online ? "bg-success" : "bg-danger"}`}
+            />
+            LINK · {online ? "NOMINAL" : "LOST"}
           </span>
-          <span className="text-foreground/30">|</span>
-          <span>SECTOR 04 · SF</span>
-          <span className="text-foreground/30">|</span>
-          <span className="hud-flicker">SCAN ACTIVE</span>
+          {fps !== undefined && (
+            <>
+              <span className="text-foreground/30">|</span>
+              <span>{fps} FPS</span>
+            </>
+          )}
+          {gpu && (
+            <>
+              <span className="text-foreground/30">|</span>
+              <span>GPU · {gpu}</span>
+            </>
+          )}
+          {tz && (
+            <>
+              <span className="text-foreground/30">|</span>
+              <span>TZ · {tz.replaceAll("_", " ")}</span>
+            </>
+          )}
         </div>
 
         {/* Right: clock + version */}
