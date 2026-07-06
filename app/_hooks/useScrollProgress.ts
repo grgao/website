@@ -39,7 +39,7 @@ export function useScrollProgress() {
     };
     lenis.on("scroll", onScroll);
 
-    // Mandatory snap — always settle onto the nearest section so the camera
+    // Mandatory snap, always settle onto the nearest section so the camera
     // parks exactly on a stop keyframe (an expanded box is always centered).
     const snap = new Snap(lenis, {
       type: "mandatory",

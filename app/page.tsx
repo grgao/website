@@ -54,7 +54,7 @@ export default function Home() {
 
   return (
     <main className="relative">
-      {/* Sticky 3D canvas — stays pinned while content scrolls over it */}
+      {/* Sticky 3D canvas, stays pinned while content scrolls over it */}
       <div className="sticky top-0 h-svh w-full z-(--z-canvas)">
         <HeroScene
           scrollProgressRef={progressRef}
@@ -66,7 +66,7 @@ export default function Home() {
       {/* Scroll content layered above the canvas. -mt pulls it back over the sticky parent. */}
       <div className="relative z-(--z-content) -mt-[100svh]">
         <HeroSection />
-        {/* One empty snap spacer per stop — the destination content lives in
+        {/* One empty snap spacer per stop, the destination content lives in
             the world-anchored boxes, which expand when their spacer settles. */}
         {STOPS.map((stop, i) => (
           <section

@@ -26,9 +26,9 @@ export function HeroSection() {
 
         <p className="mt-8 max-w-xl font-sans text-base/7 text-foreground/75">
           Full-stack engineer across backend systems, telemetry, and the
-          frontends that make them usable — currently shipping LLM-powered
+          frontends that make them usable. Currently shipping LLM-powered
           investigation agents that turn noisy telemetry into answers.
-          UW–Madison CompE + CS, 2025.
+          UW-Madison CompE + CS, 2025.
         </p>
 
         <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl font-mono text-[11px] uppercase tracking-widest">
@@ -76,8 +76,8 @@ export function ContactSection() {
         </h2>
 
         <p className="mt-6 max-w-xl font-sans text-base/7 text-foreground/75">
-          Pinging for full-stack work — frontend to backend to infra, telemetry
-          pipelines, and systems that have to behave under load. Reach out — I
+          Pinging for full-stack work: frontend to backend to infra, telemetry
+          pipelines, and systems that have to behave under load. Reach out, I
           read everything.
         </p>
 

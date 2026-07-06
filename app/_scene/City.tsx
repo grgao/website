@@ -94,7 +94,7 @@ export function City() {
         position={[0, -3.99, -30]}
       />
 
-      {/* Buildings as instanced meshes — single draw call */}
+      {/* Buildings as instanced meshes, single draw call */}
       <BuildingInstances buildings={buildings} />
 
       {/* Distant "spires" for silhouette interest */}

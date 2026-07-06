@@ -104,7 +104,7 @@ export const EXPERIENCES: Experience[] = [
       "Migrated data service from LUW tables to Apache Cassandra for continuous availability and scale.",
       "Reduced tech debt by retiring LaunchDarkly flags and modernizing legacy code paths.",
       "Eliminated formula-injection risk across 30k+ shopping lists with SQL sanitization + input rejection.",
-      "Shipped weekly C#/.NET, SQL, and Java sprint work — bugfixes, features, APIs.",
+      "Shipped weekly C#/.NET, SQL, and Java sprint work: bugfixes, features, APIs.",
     ],
   },
   {
@@ -177,9 +177,9 @@ export const SKILLS = {
 };
 
 export const EDUCATION = {
-  school: "University of Wisconsin — Madison",
+  school: "University of Wisconsin-Madison",
   degree: "BS Computer Engineering · BS Computer Science",
-  range: "SEP 2021 — MAY 2025",
+  range: "SEP 2021 - MAY 2025",
 };
 
 export const CONTACT = {

@@ -7,7 +7,7 @@ import { STOPS } from "../_data/content";
 
 // One keyframe per snap section: hero, each stop, contact.
 // The page has (STOPS.length + 2) equal-height snap sections, so snap i
-// lands at progress i / (n - 1) — which is exactly where getPoint(t)
+// lands at progress i / (n - 1), which is exactly where getPoint(t)
 // places keyframe i on a Catmull-Rom curve (uniform by knot, not arc
 // length). That alignment is what parks the camera on each stop's box.
 const CAMERA_KEYS = [
@@ -59,7 +59,7 @@ export function CameraRig({ scrollProgressRef, mouseRef }: Props) {
     camCurve.getPoint(p, tmpCam);
     lookCurve.getPoint(p, tmpLook);
 
-    // Mouse parallax — small additive offset. Sign flipped so the camera
+    // Mouse parallax, small additive offset. Sign flipped so the camera
     // rotates *toward* the cursor rather than away.
     const mx = mouseRef.current?.x ?? 0;
     const my = mouseRef.current?.y ?? 0;

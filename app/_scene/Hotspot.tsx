@@ -32,7 +32,7 @@ type Props = {
   stop: Stop;
   index: number;
   active: boolean;
-  /** Another stop is active — fade back so the open card owns the view. */
+  /** Another stop is active, fade back so the open card owns the view. */
   dimmed: boolean;
 };
 
@@ -47,7 +47,7 @@ export function Hotspot({ stop, index, active, dimmed }: Props) {
 
   // Atmospheric fade: farther boxes recede instead of all floating at
   // full strength on top of the scene. Written per frame (no CSS
-  // transition on this wrapper — camera motion already smooths it).
+  // transition on this wrapper, camera motion already smooths it).
   useFrame(({ camera }) => {
     const el = depthRef.current;
     if (!el) return;
@@ -79,7 +79,7 @@ export function Hotspot({ stop, index, active, dimmed }: Props) {
               }`}
               style={{ width: active ? "26rem" : "14.5rem" }}
             >
-              {/* Header — always visible. Numbered so the flight order reads
+              {/* Header, always visible. Numbered so the flight order reads
                   at a glance. */}
               <div className="flex items-start gap-2.5">
                 <div className="border border-current/50 px-1.5 py-0.5 font-display text-sm leading-tight shrink-0">
@@ -99,7 +99,7 @@ export function Hotspot({ stop, index, active, dimmed }: Props) {
                 </div>
               </div>
 
-              {/* Body — unfolds when this stop is the active scroll target.
+              {/* Body, unfolds when this stop is the active scroll target.
                   Fixed inner width so the collapsed box doesn't inherit the
                   body's intrinsic width. */}
               <div
@@ -166,7 +166,7 @@ function StopBody({ stop }: { stop: Stop }) {
         <BodyRow k="DEGREE" v={EDUCATION.degree} />
         <BodyRow k="TERM" v={EDUCATION.range} />
         <p className="mt-2 font-sans text-xs/5 text-foreground/80 whitespace-normal">
-          Full-stack engineer — Go services and telemetry on the back, React
+          Full-stack engineer. Go services and telemetry on the back, React
           frontends on the front, and an LLM investigation agent in between
           that reads noisy data and says what broke.
         </p>

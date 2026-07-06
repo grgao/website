@@ -19,7 +19,7 @@ const display = Orbitron({
 });
 
 export const metadata: Metadata = {
-  title: "Grace Gao — Systems Engineer",
+  title: "Grace Gao - Systems Engineer",
   description:
     "Grace Gao is a systems engineer in San Francisco building backend services, telemetry, and developer tools.",
 };
