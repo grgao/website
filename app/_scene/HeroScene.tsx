@@ -71,6 +71,7 @@ export function HeroScene({
         <Hotspot
           key={stop.id}
           stop={stop}
+          index={i}
           active={activeStop === i}
           dimmed={activeStop !== -1 && activeStop !== i}
         />
