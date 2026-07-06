@@ -39,9 +39,10 @@ export function useScrollProgress() {
     };
     lenis.on("scroll", onScroll);
 
-    // Proximity snap — settle onto a section when scroll ends near one.
+    // Mandatory snap — always settle onto the nearest section so the camera
+    // parks exactly on a stop keyframe (an expanded box is always centered).
     const snap = new Snap(lenis, {
-      type: "proximity",
+      type: "mandatory",
       velocityThreshold: 1,
       duration: 0.9,
       easing: (t: number) => 1 - Math.pow(1 - t, 3),

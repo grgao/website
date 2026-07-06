@@ -7,10 +7,70 @@ export type Experience = {
   end: string;
   status: "ACTIVE" | "ARCHIVED";
   highlights: string[];
-  // World position in the 3D city (x, y, z)
-  worldPos: [number, number, number];
   accent: "primary" | "accent" | "danger";
 };
+
+// A scroll destination in the 3D city. Each stop gets its own snap section;
+// the camera flies to worldPos and the stop's box expands when settled.
+export type Stop = {
+  id: string;
+  kind: "dossier" | "experience" | "loadout";
+  worldPos: [number, number, number];
+  accent: "primary" | "accent";
+  label: string;
+  sublabel: string;
+};
+
+export const STOPS: Stop[] = [
+  {
+    id: "dossier",
+    kind: "dossier",
+    worldPos: [3, 6, 3],
+    accent: "accent",
+    label: "DOSSIER",
+    sublabel: "Pilot profile",
+  },
+  {
+    id: "firetiger",
+    kind: "experience",
+    worldPos: [-2, 6, -8],
+    accent: "primary",
+    label: "FIRETIGER",
+    sublabel: "Systems Engineer",
+  },
+  {
+    id: "uline",
+    kind: "experience",
+    worldPos: [14, 5, -22],
+    accent: "accent",
+    label: "ULINE",
+    sublabel: "Software Developer Intern",
+  },
+  {
+    id: "thomson-reuters",
+    kind: "experience",
+    worldPos: [-16, 4, -28],
+    accent: "accent",
+    label: "THOMSON REUTERS",
+    sublabel: "Software Engineer Intern",
+  },
+  {
+    id: "pitt",
+    kind: "experience",
+    worldPos: [8, 3, -42],
+    accent: "accent",
+    label: "UNIV. OF PITTSBURGH",
+    sublabel: "Research Intern",
+  },
+  {
+    id: "loadout",
+    kind: "loadout",
+    worldPos: [-4, 8, -54],
+    accent: "accent",
+    label: "LOADOUT",
+    sublabel: "Languages & platforms",
+  },
+];
 
 export const EXPERIENCES: Experience[] = [
   {
@@ -22,7 +82,6 @@ export const EXPERIENCES: Experience[] = [
     end: "PRESENT",
     status: "ACTIVE",
     accent: "primary",
-    worldPos: [-2, 6, -8],
     highlights: [
       "Built Go backend services for an LLM-powered investigation agent that analyzes telemetry and detects data issues.",
       "Designed session/state coordination logic; defined RPC contracts with protobuf and ConnectRPC.",
@@ -41,7 +100,6 @@ export const EXPERIENCES: Experience[] = [
     end: "2024-08",
     status: "ARCHIVED",
     accent: "accent",
-    worldPos: [14, 5, -22],
     highlights: [
       "Migrated data service from LUW tables to Apache Cassandra for continuous availability and scale.",
       "Reduced tech debt by retiring LaunchDarkly flags and modernizing legacy code paths.",
@@ -58,7 +116,6 @@ export const EXPERIENCES: Experience[] = [
     end: "2023-12",
     status: "ARCHIVED",
     accent: "accent",
-    worldPos: [-16, 4, -28],
     highlights: [
       "Built IaC with AWS CDK to deploy weekly Lambda report jobs.",
       "Created a central monorepo (Python/Java) for predictable, repeatable infrastructure constructs.",
@@ -76,7 +133,6 @@ export const EXPERIENCES: Experience[] = [
     end: "2019-08",
     status: "ARCHIVED",
     accent: "accent",
-    worldPos: [8, 3, -42],
     highlights: [
       "Performed data analysis and uploaded research datasets.",
       "Assisted an engineering research project; reviewed scientific literature.",

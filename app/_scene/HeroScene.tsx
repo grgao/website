@@ -15,14 +15,19 @@ import * as THREE from "three";
 import { City, CityWindows } from "./City";
 import { CameraRig } from "./CameraRig";
 import { Hotspot } from "./Hotspot";
-import { EXPERIENCES } from "../_data/content";
+import { STOPS } from "../_data/content";
 
 type Props = {
   scrollProgressRef: React.RefObject<number>;
   scrollVelocityRef: React.RefObject<number>;
+  activeStop: number;
 };
 
-export function HeroScene({ scrollProgressRef, scrollVelocityRef }: Props) {
+export function HeroScene({
+  scrollProgressRef,
+  scrollVelocityRef,
+  activeStop,
+}: Props) {
   const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -62,8 +67,13 @@ export function HeroScene({ scrollProgressRef, scrollVelocityRef }: Props) {
       <City />
       <CityWindows />
 
-      {EXPERIENCES.map((exp) => (
-        <Hotspot key={exp.id} exp={exp} />
+      {STOPS.map((stop, i) => (
+        <Hotspot
+          key={stop.id}
+          stop={stop}
+          active={activeStop === i}
+          dimmed={activeStop !== -1 && activeStop !== i}
+        />
       ))}
 
       <CameraRig scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} />
