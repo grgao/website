@@ -1,22 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+type Props = {
+  /** A stop card is expanded, fade the crosshair so it doesn't cut through it. */
+  muted: boolean;
+};
 
-export function Reticle() {
-  const [past, setPast] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setPast(window.scrollY > window.innerHeight * 0.6);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
+export function Reticle({ muted }: Props) {
   return (
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 z-(--z-header) flex items-center justify-center transition-opacity duration-700"
-      style={{ opacity: past ? 0 : 0.75 }}
+      style={{ opacity: muted ? 0.12 : 0.75 }}
     >
       <svg
         width={220}

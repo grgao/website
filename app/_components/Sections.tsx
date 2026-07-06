@@ -25,10 +25,8 @@ export function HeroSection() {
         </div>
 
         <p className="mt-8 max-w-xl font-sans text-base/7 text-foreground/75">
-          Full-stack engineer across backend systems, telemetry, and the
-          frontends that make them usable. Go services and telemetry on the
-          back, React frontends on the front, and an LLM investigation agent
-          in between that reads noisy data and says what broke.
+          Full-stack engineer. Currently building an LLM investigation agent
+          that reads noisy telemetry and says what broke.
         </p>
 
         <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-5 max-w-3xl font-mono text-[11px] uppercase tracking-widest">

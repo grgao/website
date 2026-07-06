@@ -80,7 +80,7 @@ export default function Home() {
       </div>
 
       {/* Persistent HUD chrome */}
-      <Reticle />
+      <Reticle muted={activeStop !== -1} />
       <HudHeader />
       <HudFooter />
       <HudFrame />
