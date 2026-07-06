@@ -23,12 +23,12 @@ export type Stop = {
 
 export const STOPS: Stop[] = [
   {
-    id: "dossier",
-    kind: "dossier",
+    id: "loadout",
+    kind: "loadout",
     worldPos: [3, 6, 3],
     accent: "accent",
-    label: "DOSSIER",
-    sublabel: "Pilot profile",
+    label: "LOADOUT",
+    sublabel: "Languages & platforms",
   },
   {
     id: "firetiger",
@@ -63,12 +63,12 @@ export const STOPS: Stop[] = [
     sublabel: "Research Intern",
   },
   {
-    id: "loadout",
-    kind: "loadout",
+    id: "dossier",
+    kind: "dossier",
     worldPos: [-4, 8, -54],
     accent: "accent",
-    label: "LOADOUT",
-    sublabel: "Languages & platforms",
+    label: "DOSSIER",
+    sublabel: "Pilot profile",
   },
 ];
 
