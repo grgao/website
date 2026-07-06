@@ -1,6 +1,6 @@
 "use client";
 
-import { CONTACT } from "../_data/content";
+import { CONTACT, EDUCATION } from "../_data/content";
 import { RevealPanel } from "./RevealPanel";
 
 export function HeroSection() {
@@ -26,16 +26,18 @@ export function HeroSection() {
 
         <p className="mt-8 max-w-xl font-sans text-base/7 text-foreground/75">
           Full-stack engineer across backend systems, telemetry, and the
-          frontends that make them usable. Currently shipping LLM-powered
-          investigation agents that turn noisy telemetry into answers.
-          UW-Madison CompE + CS, 2025.
+          frontends that make them usable. Go services and telemetry on the
+          back, React frontends on the front, and an LLM investigation agent
+          in between that reads noisy data and says what broke.
         </p>
 
-        <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl font-mono text-[11px] uppercase tracking-widest">
+        <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-5 max-w-3xl font-mono text-[11px] uppercase tracking-widest">
           <StatBlock label="Status" value="ACTIVE" tone="success" />
-          <StatBlock label="Stack" value="GO · TS · OTEL" />
-          <StatBlock label="Sector" value="04 / SF" />
-          <StatBlock label="Range" value="NOMINAL" />
+          <StatBlock label="Name" value={CONTACT.name} />
+          <StatBlock label="Based" value={CONTACT.location} />
+          <StatBlock label="School" value={EDUCATION.school} />
+          <StatBlock label="Degree" value={EDUCATION.degree} />
+          <StatBlock label="Term" value={EDUCATION.range} />
         </div>
       </RevealPanel>
     </section>
@@ -55,7 +57,7 @@ function StatBlock({
     <div className="border-l-2 border-primary/60 pl-3">
       <div className="text-foreground/45 text-[9px]">{label}</div>
       <div
-        className={`mt-0.5 ${tone === "success" ? "text-success" : "text-primary"} text-shadow-hud`}
+        className={`mt-0.5 ${tone === "success" ? "text-success" : "text-primary"} text-shadow-hud text-balance`}
       >
         {value}
       </div>
