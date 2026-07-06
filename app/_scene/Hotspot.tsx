@@ -166,8 +166,9 @@ function StopBody({ stop }: { stop: Stop }) {
         <BodyRow k="DEGREE" v={EDUCATION.degree} />
         <BodyRow k="TERM" v={EDUCATION.range} />
         <p className="mt-2 font-sans text-xs/5 text-foreground/80 whitespace-normal">
-          Builds the unglamorous middle layer — Go services, telemetry, and an
-          LLM investigation agent that reads noisy data and says what broke.
+          Full-stack engineer — Go services and telemetry on the back, React
+          frontends on the front, and an LLM investigation agent in between
+          that reads noisy data and says what broke.
         </p>
       </div>
     );
