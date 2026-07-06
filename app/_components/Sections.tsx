@@ -2,11 +2,12 @@
 
 import { EDUCATION, EXPERIENCES, SKILLS, CONTACT } from "../_data/content";
 import type { Experience } from "../_data/content";
+import { RevealPanel } from "./RevealPanel";
 
 export function HeroSection() {
   return (
     <section data-snap className="relative min-h-screen flex items-end pb-32">
-      <div className="px-8 md:px-16 max-w-5xl">
+      <RevealPanel className="px-8 md:px-16 max-w-5xl">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-accent text-shadow-cyan">
           <span className="size-1.5 rounded-full bg-accent hud-pulse" />
           INCOMING TRANSMISSION · CHANNEL G-301
@@ -36,7 +37,7 @@ export function HeroSection() {
           <StatBlock label="Sector" value="04 / SF" />
           <StatBlock label="Range" value="NOMINAL" />
         </div>
-      </div>
+      </RevealPanel>
     </section>
   );
 }
@@ -65,7 +66,7 @@ function StatBlock({
 export function AboutSection() {
   return (
     <section data-snap className="relative min-h-screen flex items-center py-28">
-      <div className="px-8 md:px-16 max-w-5xl">
+      <RevealPanel className="px-8 md:px-16 max-w-5xl w-full">
         <SectionLabel index="01" title="DOSSIER" />
 
         <div className="mt-6 grid lg:grid-cols-[1.4fr_1fr] gap-10">
@@ -95,7 +96,7 @@ export function AboutSection() {
             <Row k="Term" v={EDUCATION.range} />
           </div>
         </div>
-      </div>
+      </RevealPanel>
     </section>
   );
 }
@@ -129,7 +130,7 @@ function ExperiencePanel({ exp, index }: { exp: Experience; index: number }) {
   const isCurrent = exp.status === "ACTIVE";
   return (
     <div data-snap className="min-h-screen flex items-center px-8 md:px-16 py-28">
-      <div className="max-w-5xl w-full">
+      <RevealPanel className="max-w-5xl w-full">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.28em] text-primary">
           <span
             className={`size-2 rounded-full ${isCurrent ? "bg-success hud-pulse" : "bg-primary/60"}`}
@@ -160,7 +161,7 @@ function ExperiencePanel({ exp, index }: { exp: Experience; index: number }) {
             </li>
           ))}
         </ul>
-      </div>
+      </RevealPanel>
     </div>
   );
 }
@@ -168,14 +169,14 @@ function ExperiencePanel({ exp, index }: { exp: Experience; index: number }) {
 export function SkillsSection() {
   return (
     <section data-snap className="relative min-h-screen flex items-center px-8 md:px-16 py-28">
-      <div className="max-w-6xl w-full">
+      <RevealPanel className="max-w-6xl w-full">
         <SectionLabel index="03" title="LOADOUT" />
 
         <div className="mt-10 grid md:grid-cols-2 gap-10">
           <SkillBlock title="LANGUAGES" items={SKILLS.languages} accent="primary" />
           <SkillBlock title="PLATFORMS" items={SKILLS.platforms} accent="accent" />
         </div>
-      </div>
+      </RevealPanel>
     </section>
   );
 }
@@ -215,7 +216,7 @@ function SkillBlock({
 export function ContactSection() {
   return (
     <section data-snap className="relative min-h-screen flex items-center px-8 md:px-16 pb-32">
-      <div className="max-w-5xl w-full">
+      <RevealPanel className="max-w-5xl w-full">
         <SectionLabel index="04" title="OPEN CHANNEL" />
 
         <h2 className="mt-6 font-display font-extrabold uppercase text-[clamp(2.25rem,7vw,5.5rem)] leading-[0.95] tracking-tight text-shadow-hud">
@@ -259,7 +260,7 @@ export function ContactSection() {
           <span>END OF TRANSMISSION</span>
           <span className="h-px flex-1 bg-foreground/15" />
         </div>
-      </div>
+      </RevealPanel>
     </section>
   );
 }
