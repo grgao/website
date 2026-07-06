@@ -14,7 +14,7 @@ export type Experience = {
 // the camera flies to worldPos and the stop's box expands when settled.
 export type Stop = {
   id: string;
-  kind: "dossier" | "experience" | "loadout";
+  kind: "experience" | "loadout";
   worldPos: [number, number, number];
   accent: "primary" | "accent";
   label: string;
@@ -61,14 +61,6 @@ export const STOPS: Stop[] = [
     accent: "accent",
     label: "UNIV. OF PITTSBURGH",
     sublabel: "Research Intern",
-  },
-  {
-    id: "dossier",
-    kind: "dossier",
-    worldPos: [-4, 8, -54],
-    accent: "accent",
-    label: "DOSSIER",
-    sublabel: "Pilot profile",
   },
 ];
 

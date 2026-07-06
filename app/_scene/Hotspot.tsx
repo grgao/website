@@ -5,8 +5,6 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import {
-  CONTACT,
-  EDUCATION,
   EXPERIENCES,
   SKILLS,
   STOPS,
@@ -128,7 +126,6 @@ function headerLine(stop: Stop): string {
     const exp = EXPERIENCES.find((e) => e.id === stop.id);
     return exp ? `${exp.status} · ${exp.location}` : stop.kind;
   }
-  if (stop.kind === "dossier") return "PERSONNEL FILE · G-301";
   return "EQUIPMENT MANIFEST";
 }
 
@@ -156,42 +153,11 @@ function StopBody({ stop }: { stop: Stop }) {
     );
   }
 
-  if (stop.kind === "dossier") {
-    return (
-      <div className="flex flex-col gap-1.5">
-        <BodyRow k="NAME" v={CONTACT.name} />
-        <BodyRow k="BASED" v={CONTACT.location} />
-        <BodyRow k="ROLE" v="Systems Engineer · Firetiger" />
-        <BodyRow k="SCHOOL" v={EDUCATION.school} />
-        <BodyRow k="DEGREE" v={EDUCATION.degree} />
-        <BodyRow k="TERM" v={EDUCATION.range} />
-        <p className="mt-2 font-sans text-xs/5 text-foreground/80 whitespace-normal">
-          Full-stack engineer. Go services and telemetry on the back, React
-          frontends on the front, and an LLM investigation agent in between
-          that reads noisy data and says what broke.
-        </p>
-      </div>
-    );
-  }
-
   // loadout
   return (
     <div className="flex flex-col gap-3">
       <ChipGroup title="LANGUAGES" items={SKILLS.languages} />
       <ChipGroup title="PLATFORMS" items={SKILLS.platforms} />
-    </div>
-  );
-}
-
-function BodyRow({ k, v }: { k: string; v: string }) {
-  return (
-    <div className="grid grid-cols-[4.5rem_1fr] gap-2">
-      <span className="font-mono text-[9px] uppercase tracking-widest text-foreground/50 pt-0.5">
-        {k}
-      </span>
-      <span className="font-sans text-xs text-foreground/90 whitespace-normal">
-        {v}
-      </span>
     </div>
   );
 }
