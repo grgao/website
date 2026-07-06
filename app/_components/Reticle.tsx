@@ -16,7 +16,7 @@ export function Reticle() {
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 z-(--z-header) flex items-center justify-center transition-opacity duration-700"
-      style={{ opacity: past ? 0.15 : 0.75 }}
+      style={{ opacity: past ? 0 : 0.75 }}
     >
       <svg
         width={220}
