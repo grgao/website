@@ -4,25 +4,20 @@ import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import {
-  EXPERIENCES,
-  SKILLS,
-  STOPS,
-  type Stop,
-} from "../_data/content";
+import { SKILLS, STOPS, type Stop } from "../_data/content";
 
 const ACCENT = {
   primary: {
     dot: "bg-primary",
     border: "border-primary/60",
     text: "text-primary",
-    glow: "shadow-[0_0_24px_oklch(0.78_0.19_355_/_0.35)]",
+    glow: "glow-primary",
   },
   accent: {
     dot: "bg-accent",
     border: "border-accent/60",
     text: "text-accent",
-    glow: "shadow-[0_0_24px_oklch(0.76_0.16_300_/_0.35)]",
+    glow: "glow-accent",
   },
 } as const;
 
@@ -122,17 +117,14 @@ export function Hotspot({ stop, index, active, dimmed }: Props) {
 }
 
 function headerLine(stop: Stop): string {
-  if (stop.kind === "experience") {
-    const exp = EXPERIENCES.find((e) => e.id === stop.id);
-    return exp ? `${exp.status} · ${exp.location}` : stop.kind;
-  }
-  return "EQUIPMENT MANIFEST";
+  return stop.exp
+    ? `${stop.exp.status} · ${stop.exp.location}`
+    : "EQUIPMENT MANIFEST";
 }
 
 function StopBody({ stop }: { stop: Stop }) {
-  if (stop.kind === "experience") {
-    const exp = EXPERIENCES.find((e) => e.id === stop.id);
-    if (!exp) return null;
+  if (stop.exp) {
+    const exp = stop.exp;
     return (
       <div>
         <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/55">

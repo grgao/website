@@ -27,7 +27,7 @@ export function HudHeader() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "linear-gradient(180deg, oklch(0.07 0.014 245 / 0.85) 0%, oklch(0.07 0.014 245 / 0.5) 60%, transparent 100%)",
+            "linear-gradient(180deg, color-mix(in oklch, var(--background-deep) 85%, transparent) 0%, color-mix(in oklch, var(--background-deep) 50%, transparent) 60%, transparent 100%)",
         }}
       />
       <div className="flex items-start justify-between gap-6 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
