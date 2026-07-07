@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import {
   EffectComposer,
   ChromaticAberration,
@@ -20,12 +20,14 @@ import { STOPS } from "../_data/content";
 type Props = {
   scrollProgressRef: React.RefObject<number>;
   scrollVelocityRef: React.RefObject<number>;
+  snapProgressRef: React.RefObject<number[]>;
   activeStop: number;
 };
 
 export function HeroScene({
   scrollProgressRef,
   scrollVelocityRef,
+  snapProgressRef,
   activeStop,
 }: Props) {
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -77,7 +79,11 @@ export function HeroScene({
         />
       ))}
 
-      <CameraRig scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} />
+      <CameraRig
+        scrollProgressRef={scrollProgressRef}
+        snapProgressRef={snapProgressRef}
+        mouseRef={mouseRef}
+      />
 
       <EffectComposer multisampling={0}>
         <ChromaticAberration
@@ -102,7 +108,6 @@ export function HeroScene({
  * based on scroll velocity. Sits inside the EffectComposer to share the
  * Vector2 reference with the ChromaticAberration pass.
  */
-import { useFrame } from "@react-three/fiber";
 function VelocityChroma({
   scrollVelocityRef,
   chromaOffset,

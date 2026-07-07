@@ -39,54 +39,22 @@ function generateBuildings(count: number, seed = 1337): Building[] {
   return buildings;
 }
 
+// Deterministic, shared by the building meshes and the window layer so
+// windows land on actual building faces.
+const BUILDINGS = generateBuildings(220);
+
 export function City() {
-  const buildings = useMemo(() => generateBuildings(220), []);
-
-  const { positions, scales, colors } = useMemo(() => {
-    const p = new Float32Array(buildings.length * 3);
-    const s = new Float32Array(buildings.length * 3);
-    const c = new Float32Array(buildings.length * 3);
-    const color = new THREE.Color();
-    buildings.forEach((b, i) => {
-      p[i * 3] = b.position[0];
-      p[i * 3 + 1] = b.position[1];
-      p[i * 3 + 2] = b.position[2];
-      s[i * 3] = b.size[0];
-      s[i * 3 + 1] = b.size[1];
-      s[i * 3 + 2] = b.size[2];
-      color.setHSL(b.hue, 0.05, 0.06 + b.lit * 0.05);
-      c[i * 3] = color.r;
-      c[i * 3 + 1] = color.g;
-      c[i * 3 + 2] = color.b;
-    });
-    return { positions: p, scales: s, colors: c };
-  }, [buildings]);
-
-  const { instMatrix, instColor } = useMemo(() => {
-    const m = new THREE.Matrix4();
-    const matrices: number[] = [];
-    const colorsArr: number[] = [];
-    const color = new THREE.Color();
-    for (let i = 0; i < buildings.length; i++) {
-      m.makeScale(scales[i * 3], scales[i * 3 + 1], scales[i * 3 + 2]);
-      m.setPosition(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
-      matrices.push(...m.elements);
-      color.setRGB(colors[i * 3], colors[i * 3 + 1], colors[i * 3 + 2]);
-      colorsArr.push(color.r, color.g, color.b);
-    }
-    return { instMatrix: matrices, instColor: colorsArr };
-  }, [buildings, positions, scales, colors]);
+  const spires = useMemo(
+    () => BUILDINGS.filter((b) => b.size[1] > 28).slice(0, 12),
+    []
+  );
 
   return (
     <group>
       {/* Ground plane with subtle grid */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4, -30]} receiveShadow>
         <planeGeometry args={[400, 400, 1, 1]} />
-        <meshStandardMaterial
-          color="#0d060f"
-          roughness={1}
-          metalness={0}
-        />
+        <meshStandardMaterial color="#0d060f" roughness={1} metalness={0} />
       </mesh>
 
       <gridHelper
@@ -94,28 +62,24 @@ export function City() {
         position={[0, -3.99, -30]}
       />
 
-      {/* Buildings as instanced meshes, single draw call */}
-      <BuildingInstances buildings={buildings} />
+      <BuildingInstances />
 
       {/* Distant "spires" for silhouette interest */}
-      {buildings
-        .filter((b) => b.size[1] > 28)
-        .slice(0, 12)
-        .map((b, i) => (
-          <mesh
-            key={`spire-${i}`}
-            position={[b.position[0], b.position[1] + b.size[1] / 2 + 2, b.position[2]]}
-          >
-            <coneGeometry args={[0.25, 4, 4]} />
-            <meshStandardMaterial color="#2a1830" />
-          </mesh>
-        ))}
+      {spires.map((b, i) => (
+        <mesh
+          key={`spire-${i}`}
+          position={[b.position[0], b.position[1] + b.size[1] / 2 + 2, b.position[2]]}
+        >
+          <coneGeometry args={[0.25, 4, 4]} />
+          <meshStandardMaterial color="#2a1830" />
+        </mesh>
+      ))}
     </group>
   );
 }
 
-function BuildingInstances({ buildings }: { buildings: Building[] }) {
-  const meshRef = useMemo(() => {
+function BuildingInstances() {
+  const inst = useMemo(() => {
     const geom = new THREE.BoxGeometry(1, 1, 1);
     const mat = new THREE.MeshStandardMaterial({
       color: "#241830",
@@ -124,49 +88,61 @@ function BuildingInstances({ buildings }: { buildings: Building[] }) {
       emissive: "#5a2e5e",
       emissiveIntensity: 0.4,
     });
-    const inst = new THREE.InstancedMesh(geom, mat, buildings.length);
+    const mesh = new THREE.InstancedMesh(geom, mat, BUILDINGS.length);
     const m = new THREE.Matrix4();
     const color = new THREE.Color();
-    buildings.forEach((b, i) => {
+    BUILDINGS.forEach((b, i) => {
       m.makeScale(b.size[0], b.size[1], b.size[2]);
       m.setPosition(b.position[0], b.position[1], b.position[2]);
-      inst.setMatrixAt(i, m);
-      // Warm plum → cool violet tint variation
+      mesh.setMatrixAt(i, m);
+      // Warm plum to cool violet tint variation
       color.setHSL(0.83 + (b.hue - 0.55) * 0.4, 0.35, 0.06 + b.lit * 0.05);
-      inst.setColorAt(i, color);
+      mesh.setColorAt(i, color);
     });
-    inst.instanceMatrix.needsUpdate = true;
-    if (inst.instanceColor) inst.instanceColor.needsUpdate = true;
-    return inst;
-  }, [buildings]);
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    return mesh;
+  }, []);
 
-  return <primitive object={meshRef} />;
+  return <primitive object={inst} />;
 }
 
-/** Emissive window dots layered as a separate instanced mesh */
+/** Emissive window dots placed on actual building faces. */
 export function CityWindows({ count = 1400, seed = 4242 }: { count?: number; seed?: number }) {
   const inst = useMemo(() => {
     const rand = seededRandom(seed);
     const geom = new THREE.PlaneGeometry(0.18, 0.18);
     const mat = new THREE.MeshBasicMaterial({
-      color: 0xffd089,
+      color: 0xffffff,
       transparent: true,
       opacity: 0.95,
       toneMapped: false,
+      side: THREE.DoubleSide,
     });
     const mesh = new THREE.InstancedMesh(geom, mat, count);
     const m = new THREE.Matrix4();
     const color = new THREE.Color();
     for (let i = 0; i < count; i++) {
-      const radius = 20 + rand() * 90;
-      const angle = rand() * Math.PI * 2;
-      const x = Math.cos(angle) * radius;
-      const z = -Math.abs(Math.sin(angle) * radius) - 5;
-      const h = 4 + Math.pow(rand(), 1.6) * 38;
-      const y = -4 + rand() * h;
-      const facing = rand() > 0.5 ? 0 : Math.PI / 2;
-      m.makeRotationY(facing);
-      m.setPosition(x + (Math.cos(facing) * 2.4), y, z + (Math.sin(facing) * 2.4));
+      const b = BUILDINGS[Math.floor(rand() * BUILDINGS.length)];
+      const [bx, by, bz] = b.position;
+      const [w, h, d] = b.size;
+      const y = by - h / 2 + (0.08 + rand() * 0.84) * h;
+
+      // Pick one of the four faces, offset just outside it.
+      const face = Math.floor(rand() * 4);
+      let x = bx;
+      let z = bz;
+      let rotY = 0;
+      if (face < 2) {
+        x = bx + (rand() - 0.5) * w * 0.8;
+        z = face === 0 ? bz + d / 2 + 0.03 : bz - d / 2 - 0.03;
+      } else {
+        z = bz + (rand() - 0.5) * d * 0.8;
+        x = face === 2 ? bx + w / 2 + 0.03 : bx - w / 2 - 0.03;
+        rotY = Math.PI / 2;
+      }
+      m.makeRotationY(rotY);
+      m.setPosition(x, y, z);
       mesh.setMatrixAt(i, m);
 
       const choice = rand();

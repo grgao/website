@@ -20,7 +20,6 @@
   --z-content: 10;
   --z-header: 30;
   --z-frame: 40;
-  --z-toast: 50;
   --frame-inset: 16px;
   --radius: 0;
 }
@@ -88,18 +87,6 @@ body {
 }
 .hud-pulse { animation: hud-pulse 1.6s ease-in-out infinite; }
 
-/* Flicker for "live signal" indicators */
-@keyframes hud-flicker {
-  0%, 100% { opacity: 1; }
-  41% { opacity: 1; }
-  42% { opacity: 0.4; }
-  43% { opacity: 1; }
-  78% { opacity: 1; }
-  79% { opacity: 0.6; }
-  80% { opacity: 1; }
-}
-.hud-flicker { animation: hud-flicker 4s ease-in-out infinite; }
-
 /* Crawling ticker */
 @keyframes ticker-scroll {
   0% { transform: translateX(0); }
@@ -107,20 +94,20 @@ body {
 }
 .ticker-track { animation: ticker-scroll 40s linear infinite; }
 
-/* Diagonal stripes used on warning bars */
-.diag-stripes {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    oklch(0.78 0.19 355 / 0.6) 0,
-    oklch(0.78 0.19 355 / 0.6) 6px,
-    transparent 6px,
-    transparent 14px
-  );
-}
-
+/* Token-driven glow helpers so palette changes propagate everywhere */
 .text-shadow-hud {
-  text-shadow: 0 0 10px oklch(0.78 0.19 355 / 0.55), 0 0 28px oklch(0.78 0.19 355 / 0.25);
+  text-shadow:
+    0 0 10px color-mix(in oklch, var(--primary) 55%, transparent),
+    0 0 28px color-mix(in oklch, var(--primary) 25%, transparent);
 }
 .text-shadow-cyan {
-  text-shadow: 0 0 10px oklch(0.76 0.16 300 / 0.5), 0 0 24px oklch(0.76 0.16 300 / 0.22);
+  text-shadow:
+    0 0 10px color-mix(in oklch, var(--accent) 50%, transparent),
+    0 0 24px color-mix(in oklch, var(--accent) 22%, transparent);
+}
+.glow-primary {
+  box-shadow: 0 0 24px color-mix(in oklch, var(--primary) 35%, transparent);
+}
+.glow-accent {
+  box-shadow: 0 0 24px color-mix(in oklch, var(--accent) 35%, transparent);
 }
