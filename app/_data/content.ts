@@ -7,7 +7,7 @@ export type Experience = {
   end: string;
   status: "ACTIVE" | "ARCHIVED";
   highlights: string[];
-  accent: "primary" | "accent" | "danger";
+  accent: "primary" | "accent";
 };
 
 // A scroll destination in the 3D city. Each stop gets its own snap section;
@@ -19,50 +19,9 @@ export type Stop = {
   accent: "primary" | "accent";
   label: string;
   sublabel: string;
+  /** Set for experience stops; card header and body read from it. */
+  exp?: Experience;
 };
-
-export const STOPS: Stop[] = [
-  {
-    id: "loadout",
-    kind: "loadout",
-    worldPos: [3, 6, 3],
-    accent: "accent",
-    label: "LOADOUT",
-    sublabel: "Languages & platforms",
-  },
-  {
-    id: "firetiger",
-    kind: "experience",
-    worldPos: [-2, 6, -8],
-    accent: "primary",
-    label: "FIRETIGER",
-    sublabel: "Systems Engineer",
-  },
-  {
-    id: "uline",
-    kind: "experience",
-    worldPos: [14, 5, -22],
-    accent: "accent",
-    label: "ULINE",
-    sublabel: "Software Developer Intern",
-  },
-  {
-    id: "thomson-reuters",
-    kind: "experience",
-    worldPos: [-16, 4, -28],
-    accent: "accent",
-    label: "THOMSON REUTERS",
-    sublabel: "Software Engineer Intern",
-  },
-  {
-    id: "pitt",
-    kind: "experience",
-    worldPos: [8, 3, -42],
-    accent: "accent",
-    label: "UNIV. OF PITTSBURGH",
-    sublabel: "Research Intern",
-  },
-];
 
 export const EXPERIENCES: Experience[] = [
   {
@@ -130,6 +89,36 @@ export const EXPERIENCES: Experience[] = [
       "Assisted an engineering research project; reviewed scientific literature.",
     ],
   },
+];
+
+// Where each experience's marker sits in the 3D city.
+const EXPERIENCE_PLACEMENTS: Record<string, [number, number, number]> = {
+  firetiger: [-2, 6, -8],
+  uline: [14, 5, -22],
+  "thomson-reuters": [-16, 4, -28],
+  pitt: [8, 3, -42],
+};
+
+export const STOPS: Stop[] = [
+  {
+    id: "loadout",
+    kind: "loadout",
+    worldPos: [3, 6, 3],
+    accent: "accent",
+    label: "LOADOUT",
+    sublabel: "Languages & platforms",
+  },
+  ...EXPERIENCES.map(
+    (exp): Stop => ({
+      id: exp.id,
+      kind: "experience",
+      worldPos: EXPERIENCE_PLACEMENTS[exp.id],
+      accent: exp.accent,
+      label: exp.company,
+      sublabel: exp.role,
+      exp,
+    })
+  ),
 ];
 
 export const SKILLS = {

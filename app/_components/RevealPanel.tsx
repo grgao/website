@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { onScrollMeasure } from "../_hooks/useScrollProgress";
 
 type Props = {
   children: ReactNode;
@@ -16,8 +17,8 @@ const CLOSE_AT = 0.35;
  * Wraps section content. While the panel is offscreen or barely visible,
  * the content is collapsed (thin horizontal strip + blur). When the section
  * settles into view (e.g. after a scroll snap) it unfurls open. Scrolling
- * away reverses it. Visibility is measured each frame so it stays in sync
- * with Lenis-animated scrolling.
+ * away reverses it. Visibility is remeasured on every scroll frame via the
+ * shared measurement registry.
  */
 export function RevealPanel({ children, className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
@@ -25,26 +26,19 @@ export function RevealPanel({ children, className }: Props) {
   const openRef = useRef(false);
 
   useEffect(() => {
-    let raf = 0;
-    const tick = () => {
+    return onScrollMeasure(() => {
       const el = ref.current;
-      if (el) {
-        const r = el.getBoundingClientRect();
-        const vh = window.innerHeight;
-        const visiblePx = Math.min(r.bottom, vh) - Math.max(r.top, 0);
-        const frac = visiblePx / Math.min(r.height || 1, vh);
-        const next = openRef.current
-          ? frac > CLOSE_AT
-          : frac > OPEN_AT;
-        if (next !== openRef.current) {
-          openRef.current = next;
-          setOpen(next);
-        }
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const visiblePx = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      const frac = visiblePx / Math.min(r.height || 1, vh);
+      const next = openRef.current ? frac > CLOSE_AT : frac > OPEN_AT;
+      if (next !== openRef.current) {
+        openRef.current = next;
+        setOpen(next);
       }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    });
   }, []);
 
   return (

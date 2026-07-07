@@ -7,7 +7,10 @@ import { HudHeader } from "./_components/HudHeader";
 import { HudFooter } from "./_components/HudFooter";
 import { Reticle } from "./_components/Reticle";
 import { HeroSection, ContactSection } from "./_components/Sections";
-import { useScrollProgress } from "./_hooks/useScrollProgress";
+import {
+  onScrollMeasure,
+  useScrollProgress,
+} from "./_hooks/useScrollProgress";
 import { STOPS } from "./_data/content";
 
 const HeroScene = dynamic(
@@ -15,21 +18,16 @@ const HeroScene = dynamic(
   { ssr: false }
 );
 
-/**
- * Tracks which stop spacer currently covers the middle of the viewport.
- * Measured per frame so it follows the Lenis snap animation exactly.
- */
+/** Tracks which stop spacer currently covers the middle of the viewport. */
 function useActiveStop() {
   const [active, setActive] = useState(-1);
 
   useEffect(() => {
-    let raf = 0;
     let current = -1;
-    const tick = () => {
+    return onScrollMeasure(() => {
       const vh = window.innerHeight;
-      const els = document.querySelectorAll<HTMLElement>("[data-stop]");
       let next = -1;
-      els.forEach((el) => {
+      document.querySelectorAll<HTMLElement>("[data-stop]").forEach((el) => {
         const r = el.getBoundingClientRect();
         if (r.top <= vh * 0.4 && r.bottom >= vh * 0.6) {
           next = Number(el.dataset.stop);
@@ -39,17 +37,14 @@ function useActiveStop() {
         current = next;
         setActive(next);
       }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    });
   }, []);
 
   return active;
 }
 
 export default function Home() {
-  const { progressRef, velocityRef } = useScrollProgress();
+  const { progressRef, velocityRef, snapProgressRef } = useScrollProgress();
   const activeStop = useActiveStop();
 
   return (
@@ -59,6 +54,7 @@ export default function Home() {
         <HeroScene
           scrollProgressRef={progressRef}
           scrollVelocityRef={velocityRef}
+          snapProgressRef={snapProgressRef}
           activeStop={activeStop}
         />
       </div>
