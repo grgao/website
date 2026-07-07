@@ -2,39 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-/** Pull a readable GPU model out of the WebGL renderer string.
- *  Raw values look like "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)". */
-function detectGpu(): string | undefined {
-  try {
-    const canvas = document.createElement("canvas");
-    const gl =
-      canvas.getContext("webgl2") ?? canvas.getContext("webgl");
-    if (!gl) return undefined;
-    const ext = gl.getExtension("WEBGL_debug_renderer_info");
-    const raw: string = ext
-      ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
-      : gl.getParameter(gl.RENDERER);
-    if (!raw) return undefined;
-
-    let name = raw;
-    const angle = raw.match(/^ANGLE \((.*)\)$/);
-    if (angle) {
-      const parts = angle[1].split(",").map((p) => p.trim());
-      name = parts[1] ?? parts[0];
-    }
-    name = name.replace(/^ANGLE Metal Renderer:\s*/i, "").replace(/\s*\/.*$/, "");
-    return name.slice(0, 28);
-  } catch {
-    return undefined;
-  }
-}
-
-function useHudTelemetry() {
+export function HudHeader() {
   const [time, setTime] = useState("--:--:--");
-  const [fps, setFps] = useState<number>();
-  const [gpu, setGpu] = useState<string>();
-  const [tz, setTz] = useState<string>();
-  const [online, setOnline] = useState(true);
 
   useEffect(() => {
     const update = () => {
@@ -46,44 +15,6 @@ function useHudTelemetry() {
     const id = setInterval(update, 1000);
     return () => clearInterval(id);
   }, []);
-
-  useEffect(() => {
-    setGpu(detectGpu());
-    setTz(Intl.DateTimeFormat().resolvedOptions().timeZone);
-
-    setOnline(navigator.onLine);
-    const up = () => setOnline(true);
-    const down = () => setOnline(false);
-    window.addEventListener("online", up);
-    window.addEventListener("offline", down);
-
-    // Real frame rate of the page (same thread as the WebGL scene).
-    let raf = 0;
-    let frames = 0;
-    let last = performance.now();
-    const tick = (now: number) => {
-      frames++;
-      if (now - last >= 1000) {
-        setFps(Math.round((frames * 1000) / (now - last)));
-        frames = 0;
-        last = now;
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-
-    return () => {
-      window.removeEventListener("online", up);
-      window.removeEventListener("offline", down);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  return { time, fps, gpu, tz, online };
-}
-
-export function HudHeader() {
-  const { time, fps, gpu, tz, online } = useHudTelemetry();
 
   return (
     <header
@@ -109,32 +40,9 @@ export function HudHeader() {
           </div>
         </div>
 
-        {/* Middle: live telemetry */}
-        <div className="hidden md:flex items-center gap-2 text-[10px] text-foreground/70">
-          <span className="inline-flex items-center gap-1.5">
-            <span
-              className={`size-1.5 rounded-full hud-pulse ${online ? "bg-success" : "bg-danger"}`}
-            />
-            LINK · {online ? "NOMINAL" : "LOST"}
-          </span>
-          {fps !== undefined && (
-            <>
-              <span className="text-foreground/30">|</span>
-              <span>{fps} FPS</span>
-            </>
-          )}
-          {gpu && (
-            <>
-              <span className="text-foreground/30">|</span>
-              <span>GPU · {gpu}</span>
-            </>
-          )}
-          {tz && (
-            <>
-              <span className="text-foreground/30">|</span>
-              <span>TZ · {tz.replaceAll("_", " ")}</span>
-            </>
-          )}
+        {/* Middle: decorative crest */}
+        <div className="hidden md:flex flex-1 items-center justify-center pt-1">
+          <Crest />
         </div>
 
         {/* Right: clock + version */}
@@ -144,6 +52,37 @@ export function HudHeader() {
         </div>
       </div>
     </header>
+  );
+}
+
+function Crest() {
+  return (
+    <svg
+      width="260"
+      height="18"
+      viewBox="0 0 260 18"
+      fill="none"
+      className="text-primary/70"
+      aria-hidden
+    >
+      {/* flanking rails with end dots */}
+      <circle cx="4" cy="9" r="1.5" fill="currentColor" />
+      <line x1="10" y1="9" x2="96" y2="9" stroke="currentColor" strokeWidth="1" />
+      <line x1="164" y1="9" x2="250" y2="9" stroke="currentColor" strokeWidth="1" />
+      <circle cx="256" cy="9" r="1.5" fill="currentColor" />
+
+      {/* tick marks along the rails */}
+      <line x1="40" y1="6" x2="40" y2="12" stroke="currentColor" strokeWidth="1" opacity="0.6" />
+      <line x1="68" y1="7" x2="68" y2="11" stroke="currentColor" strokeWidth="1" opacity="0.6" />
+      <line x1="192" y1="7" x2="192" y2="11" stroke="currentColor" strokeWidth="1" opacity="0.6" />
+      <line x1="220" y1="6" x2="220" y2="12" stroke="currentColor" strokeWidth="1" opacity="0.6" />
+
+      {/* center diamond cluster */}
+      <path d="M130 2 L137 9 L130 16 L123 9 Z" stroke="currentColor" strokeWidth="1" fill="none" />
+      <path d="M130 5.5 L133.5 9 L130 12.5 L126.5 9 Z" fill="currentColor" />
+      <path d="M112 9 L117 6 L117 12 Z" fill="currentColor" opacity="0.7" />
+      <path d="M148 9 L143 6 L143 12 Z" fill="currentColor" opacity="0.7" />
+    </svg>
   );
 }
 
