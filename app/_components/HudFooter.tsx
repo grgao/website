@@ -144,9 +144,6 @@ export function HudFooter() {
           >
             SOUND : OFF
           </button>
-          <span className="hidden sm:inline text-foreground/45">
-            BGM · KOH-LANTA · 432HZ
-          </span>
         </div>
 
         {/* Center: scrolling ticker with live telemetry */}

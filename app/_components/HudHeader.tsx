@@ -36,13 +36,8 @@ export function HudHeader() {
           <Diamond />
           <div className="leading-tight">
             <div className="text-primary/90 text-shadow-hud">GRACE.E.GAO</div>
-            <div className="text-foreground/55 text-[9px]">PILOT // CALL-SIGN G-301</div>
+            <div className="text-foreground/55 text-[9px]">SYSTEMS ENGINEER // FIRETIGER</div>
           </div>
-        </div>
-
-        {/* Middle: decorative crest */}
-        <div className="hidden md:flex flex-1 items-center justify-center pt-1">
-          <Crest />
         </div>
 
         {/* Right: clock + version */}
@@ -52,37 +47,6 @@ export function HudHeader() {
         </div>
       </div>
     </header>
-  );
-}
-
-function Crest() {
-  return (
-    <svg
-      width="260"
-      height="18"
-      viewBox="0 0 260 18"
-      fill="none"
-      className="text-primary/70"
-      aria-hidden
-    >
-      {/* flanking rails with end dots */}
-      <circle cx="4" cy="9" r="1.5" fill="currentColor" />
-      <line x1="10" y1="9" x2="96" y2="9" stroke="currentColor" strokeWidth="1" />
-      <line x1="164" y1="9" x2="250" y2="9" stroke="currentColor" strokeWidth="1" />
-      <circle cx="256" cy="9" r="1.5" fill="currentColor" />
-
-      {/* tick marks along the rails */}
-      <line x1="40" y1="6" x2="40" y2="12" stroke="currentColor" strokeWidth="1" opacity="0.6" />
-      <line x1="68" y1="7" x2="68" y2="11" stroke="currentColor" strokeWidth="1" opacity="0.6" />
-      <line x1="192" y1="7" x2="192" y2="11" stroke="currentColor" strokeWidth="1" opacity="0.6" />
-      <line x1="220" y1="6" x2="220" y2="12" stroke="currentColor" strokeWidth="1" opacity="0.6" />
-
-      {/* center diamond cluster */}
-      <path d="M130 2 L137 9 L130 16 L123 9 Z" stroke="currentColor" strokeWidth="1" fill="none" />
-      <path d="M130 5.5 L133.5 9 L130 12.5 L126.5 9 Z" fill="currentColor" />
-      <path d="M112 9 L117 6 L117 12 Z" fill="currentColor" opacity="0.7" />
-      <path d="M148 9 L143 6 L143 12 Z" fill="currentColor" opacity="0.7" />
-    </svg>
   );
 }
 

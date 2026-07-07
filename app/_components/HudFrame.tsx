@@ -13,6 +13,41 @@ export function HudFrame() {
         <Corner pos="bl" />
         <Corner pos="br" />
 
+        {/* Top canopy strut: frame rails running between the corners with an
+            angled notch at center, continuing the corner-bracket linework. */}
+        <div className="absolute top-0 inset-x-12 hidden md:flex items-start text-primary/70">
+          <div className="mt-[1.5px] h-px flex-1 bg-current opacity-70" />
+          <svg
+            width="360"
+            height="20"
+            viewBox="0 0 360 20"
+            fill="none"
+            className="shrink-0"
+            aria-hidden
+          >
+            <path
+              d="M0 2 L30 14 L330 14 L360 2"
+              stroke="currentColor"
+              strokeWidth="1"
+            />
+            {/* inner echo line */}
+            <path
+              d="M46 18 L314 18"
+              stroke="currentColor"
+              strokeWidth="1"
+              opacity="0.35"
+            />
+            {/* ticks along the strut */}
+            <line x1="90" y1="11" x2="90" y2="17" stroke="currentColor" strokeWidth="1" opacity="0.6" />
+            <line x1="270" y1="11" x2="270" y2="17" stroke="currentColor" strokeWidth="1" opacity="0.6" />
+            {/* center diamond */}
+            <path d="M180 6 L185 10.5 L180 15 L175 10.5 Z" fill="currentColor" />
+            <path d="M158 10.5 L164 7.5 L164 13.5 Z" fill="currentColor" opacity="0.6" />
+            <path d="M202 10.5 L196 7.5 L196 13.5 Z" fill="currentColor" opacity="0.6" />
+          </svg>
+          <div className="mt-[1.5px] h-px flex-1 bg-current opacity-70" />
+        </div>
+
         {/* Side gridlines */}
         <SideTicks side="left" />
         <SideTicks side="right" />
@@ -62,7 +97,7 @@ function SideTicks({ side }: { side: "left" | "right" }) {
   const ticks = Array.from({ length: 9 });
   return (
     <div
-      className={`absolute top-1/2 ${side === "left" ? "left-1" : "right-1"} -translate-y-1/2 flex flex-col gap-3 text-primary/70`}
+      className={`absolute top-1/2 ${side === "left" ? "left-1 items-start" : "right-1 items-end"} -translate-y-1/2 flex flex-col gap-3 text-primary/70`}
     >
       {ticks.map((_, i) => (
         <div

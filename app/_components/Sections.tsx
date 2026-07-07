@@ -9,7 +9,7 @@ export function HeroSection() {
       <RevealPanel className="px-8 md:px-16 max-w-5xl">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-accent text-shadow-cyan">
           <span className="size-1.5 rounded-full bg-accent hud-pulse" />
-          INCOMING TRANSMISSION · CHANNEL G-301
+          INCOMING TRANSMISSION · SAN FRANCISCO
         </div>
 
         <h1 className="mt-6 font-display font-extrabold uppercase leading-[0.95] text-foreground text-shadow-hud text-[clamp(2.75rem,9vw,7.5rem)] tracking-tight">
